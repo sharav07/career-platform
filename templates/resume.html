@@ -6,8 +6,8 @@
 <header class="profile-header">
   <p class="eyebrow">Resume</p>
   <h1>{{ content.resume.profile.name }}</h1>
-  <p class="headline">{{ content.resume.profile.headline }}</p>
-  <p class="summary">{{ content.resume.profile.summary }}</p>
+  {% if content.resume.profile.headline %}<p class="headline">{{ content.resume.profile.headline }}</p>{% endif %}
+  {% if content.resume.profile.summary %}<p class="summary">{{ content.resume.profile.summary }}</p>{% endif %}
   {% if content.resume.profile.location %}
   <p class="location">{{ content.resume.profile.location }}</p>
   {% endif %}
@@ -22,7 +22,7 @@
 <aside class="availability-notice" role="status">{{ content.notice }}</aside>
 {% else %}
 <div class="resume-sections">
-  <section aria-labelledby="experience-heading">
+  <section class="resume-section" aria-labelledby="experience-heading">
     <h2 id="experience-heading">Experience</h2>
     {% for item in content.resume.experience %}
     <article class="resume-entry">
@@ -41,7 +41,7 @@
     {% endfor %}
   </section>
 
-  <section aria-labelledby="skills-heading">
+  <section class="resume-section" aria-labelledby="skills-heading">
     <h2 id="skills-heading">Skills</h2>
     {% for group in content.resume.skill_groups %}
     <div class="skill-group">
@@ -53,7 +53,7 @@
     {% endfor %}
   </section>
 
-  <section aria-labelledby="projects-heading">
+  <section class="resume-section" aria-labelledby="projects-heading">
     <h2 id="projects-heading">Projects</h2>
     {% for item in content.resume.projects %}
     <article class="resume-entry">
@@ -66,7 +66,7 @@
     {% endfor %}
   </section>
 
-  <section aria-labelledby="education-heading">
+  <section class="resume-section" aria-labelledby="education-heading">
     <h2 id="education-heading">Education</h2>
     {% for item in content.resume.education %}
     <article class="resume-entry">
@@ -78,7 +78,7 @@
     {% endfor %}
   </section>
 
-  <section aria-labelledby="certifications-heading">
+  <section class="resume-section" aria-labelledby="certifications-heading">
     <h2 id="certifications-heading">Certifications</h2>
     {% for item in content.resume.certifications %}
     <article class="resume-entry">
