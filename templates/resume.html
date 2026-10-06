@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ content.resume.profile.name }} — {{ content.resume.profile.headline }}{% endblock %}
+
+{% block content %}
+<header class="profile-header">
+  <p class="eyebrow">Resume</p>
+  <h1>{{ content.resume.profile.name }}</h1>
+  <p class="headline">{{ content.resume.profile.headline }}</p>
+  <p class="summary">{{ content.resume.profile.summary }}</p>
+  {% if content.resume.profile.location %}
+  <p class="location">{{ content.resume.profile.location }}</p>
+  {% endif %}
+  <nav class="contact-links" aria-label="Contact links">
+    {% for link in content.resume.profile.contact_links %}
+    <a href="{{ link.url }}">{{ link.label }}</a>
+    {% endfor %}
+  </nav>
+</header>
+
+{% if content.degraded %}
+<aside class="availability-notice" role="status">{{ content.notice }}</aside>
+{% else %}
+<div class="resume-sections">
+  <section aria-labelledby="experience-heading">
+    <h2 id="experience-heading">Experience</h2>
+    {% for item in content.resume.experience %}
+    <article class="resume-entry">
+      <div class="entry-heading">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.employer }}</p>
+      </div>
+      <p class="metadata">{{ item.start_date }}{% if item.end_date %} – {{ item.end_date }}{% else %} – Present{% endif %}{% if item.location %} · {{ item.location }}{% endif %}</p>
+      {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+      <ul>
+        {% for achievement in item.achievements %}
+        <li>{{ achievement.text }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills</h2>
+    {% for group in content.resume.skill_groups %}
+    <div class="skill-group">
+      <h3>{{ group.name }}</h3>
+      <ul class="skill-list">
+        {% for skill in group.skills %}<li>{{ skill.name }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="projects-heading">
+    <h2 id="projects-heading">Projects</h2>
+    {% for item in content.resume.projects %}
+    <article class="resume-entry">
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.summary }}</p>
+      {% if item.contribution %}<p><strong>Contribution:</strong> {{ item.contribution }}</p>{% endif %}
+      {% if item.outcome %}<p><strong>Outcome:</strong> {{ item.outcome }}</p>{% endif %}
+      {% if item.technologies %}<p class="metadata">{{ item.technologies | join(", ") }}</p>{% endif %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="education-heading">
+    <h2 id="education-heading">Education</h2>
+    {% for item in content.resume.education %}
+    <article class="resume-entry">
+      <h3>{{ item.credential }}</h3>
+      <p>{{ item.institution }}</p>
+      {% if item.start_date or item.end_date %}<p class="metadata">{{ item.start_date or "" }}{% if item.end_date %} – {{ item.end_date }}{% endif %}</p>{% endif %}
+      {% if item.details %}<p>{{ item.details }}</p>{% endif %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="certifications-heading">
+    <h2 id="certifications-heading">Certifications</h2>
+    {% for item in content.resume.certifications %}
+    <article class="resume-entry">
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.issuer }}</p>
+      {% if item.issue_date %}<p class="metadata">{{ item.issue_date }}</p>{% endif %}
+    </article>
+    {% endfor %}
+  </section>
+</div>
+{% endif %}
+{% endblock %}

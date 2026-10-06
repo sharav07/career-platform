@@ -7,10 +7,12 @@ import sqlite3
 from pathlib import Path
 
 import pytest
+from fastapi.testclient import TestClient
 
 from app.db import load_resume
 from app.content import load_public_content
 from app.importer import import_seed
+from app.main import create_app
 
 
 def seed_path() -> Path:
@@ -127,3 +129,19 @@ def test_unavailable_database_returns_seed_profile_and_degraded_notice(tmp_path:
     assert result.resume.profile.name == "Your Name"
     assert result.resume.profile.contact_links
     assert result.resume.experience == []
+
+
+def test_homepage_renders_seed_profile_when_database_is_down(tmp_path: Path) -> None:
+    app = create_app(
+        database_path=tmp_path / "missing" / "resume.db",
+        seed_path=seed_path(),
+    )
+    response = TestClient(app).get("/")
+
+    assert response.status_code == 200
+    assert "Your Name" in response.text
+    assert "Your Professional Headline" in response.text
+    assert "Replace this placeholder summary" in response.text
+    assert "mailto:you@example.com" in response.text
+    assert "temporarily unavailable" in response.text
+    assert "Internal Server Error" not in response.text
