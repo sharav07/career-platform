@@ -105,9 +105,16 @@ site. The boundary may be implemented as server-side queries, a repository
 module, or a read-only API depending on the selected application stack, but
 page components must not embed SQL or seed-file parsing logic.
 
-The public layer must return an explicit empty/content-unavailable state if the
-database has not been seeded. It must not silently substitute stale, partial,
-or success-shaped hard-coded content.
+The profile header is a resilience exception: if the database is empty or
+unavailable, the public layer must load the profile header (name, headline,
+summary, and contact links) from the checked-in seed file. It must render that
+header with a visible notice that the rest of the resume is temporarily
+unavailable. The profile page must never show a server error page because the
+database is empty or unavailable.
+
+When the database is available, the public layer must use database content for
+the full resume. It must not silently substitute stale, partial, or
+success-shaped hard-coded content for database-backed sections.
 
 ## 5. Data model
 
@@ -132,8 +139,9 @@ The initial relational model should include the following entities:
 All public content entities should include stable identifiers, visibility
 status, and explicit display ordering where they are list members. Dates must
 use a representation that supports partial dates such as year-only entries.
-Links must be stored as validated URLs and rendered with safe external-link
-behavior.
+Links should be stored as URL values and rendered with safe external-link
+behavior; v1 does not require checking whether destinations are reachable
+during import.
 
 The schema should leave room for future ownership/profile relationships, but v1
 must enforce one public profile and must not introduce unused multi-user
@@ -160,26 +168,26 @@ The database is the runtime source for the public site. The seed file is the
 repeatable editorial input used to initialize or refresh that database. No
 browser-facing code may write to the database in v1.
 
-The implementation should prefer a managed relational database and standard
-deployment primitives where practical, but the specification does not require
-one hosting vendor. The chosen stack must provide migrations, parameterized
+The fixed v1 stack is Python, FastAPI, Jinja templates, SQLite, UV, and
+Uvicorn. The application must be able to run on a single Linux VM behind
+Nginx. SQLite is the only v1 database; no managed database is required or
+permitted. The chosen implementation must provide migrations, parameterized
 queries, connection/configuration validation, and a reproducible seed command.
 
 ## 7. Error handling and operational behavior
 
-- Missing or invalid database configuration must prevent startup or deployment
-  with an actionable error.
+- Missing or invalid database configuration must be reported with an
+  actionable error, while the public profile remains available from the seed
+  file when the database cannot be used.
 - Seed validation errors must identify the field and record that failed.
 - Import failures must be transactional where supported, avoiding a partially
   refreshed dataset.
-- Database read failures must produce a controlled server error state and
-  useful server-side diagnostics without exposing credentials, SQL, or internal
-  details publicly.
-- An empty database must show a deliberate unavailable-content state in
-  non-production environments and fail deployment readiness checks for
-  production.
-- External links must be validated at import time; unreachable destinations
-  are not a reason for the public page to fail.
+- Database read failures must produce useful server-side diagnostics without
+  exposing credentials, SQL, or internal details publicly, and must render the
+  seed-backed profile header with a visible notice that the rest of the resume
+  is temporarily unavailable.
+- An empty database must render the same seed-backed profile fallback and
+  notice; it must never produce a server error page for the profile.
 
 ## 8. Accessibility, performance, and security
 
@@ -192,8 +200,6 @@ The public site must:
   techniques and avoid loading unnecessary client-side JavaScript.
 - Avoid exposing database credentials or administrative endpoints.
 - Use parameterized database access and validate all seed input.
-- Apply secure production defaults for headers, cookies if any are introduced,
-  and external-link handling.
 
 ## 9. Testing and acceptance criteria
 
@@ -202,15 +208,15 @@ The implementation is ready for v1 when:
 - A clean database can be migrated and populated from the checked-in seed file.
 - Re-running the seed process produces the same logical dataset without
   duplicates.
-- Invalid seed data fails validation and does not leave a partial import.
-- Public pages render every required content category from database records.
-- Hidden/unpublished records are excluded from all public responses.
+- Public pages render the profile header from the checked-in seed file when the
+  database is empty or unavailable, with a visible temporary-unavailability
+  notice and no server error page.
 - Explicit ordering is respected for experience, achievements, skills, projects,
   education, and certifications.
-- Empty, database-error, and successful content states are covered by tests.
-- Responsive and accessibility checks pass for the public page.
-- Production configuration contains no public write path, admin route, or
-  authentication requirement in v1.
+- Tests cover seed import, explicit content ordering, and the database-down
+  profile fallback.
+- The public deployment contains no write path, admin route, or authentication
+  requirement in v1.
 
 ## 10. Future work
 
@@ -242,14 +248,13 @@ single-profile import workflow is sufficient.
 
 The implementation plan must select and document:
 
-- Application framework and language.
-- Relational database provider and local-development setup.
 - Seed-file format and schema validation library.
 - Migration and deterministic upsert strategy.
-- Deployment target and environment configuration.
-- Whether public pages are server-rendered, statically generated with a build
-  step, or a hybrid.
+- Nginx reverse-proxy configuration and Linux VM deployment details.
+- Whether the FastAPI/Jinja site is server-rendered directly or uses a
+  pre-generation step where appropriate.
 
-These choices must preserve the requirements and boundaries in this document;
-they should not introduce an admin area, login, or future-platform feature into
-v1.
+The implementation must use Python, FastAPI, Jinja templates, SQLite, UV,
+Uvicorn, and a single Linux VM behind Nginx. These choices must preserve the
+requirements and boundaries in this document; they should not introduce an
+admin area, login, or future-platform feature into v1.
