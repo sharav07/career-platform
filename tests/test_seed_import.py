@@ -16,7 +16,7 @@ from app.main import create_app
 
 
 def seed_path() -> Path:
-    return Path(__file__).parents[1] / "data" / "resume.json"
+    return Path(__file__).parent / "fixtures" / "resume_fixture.json"
 
 
 def test_import_populates_all_resume_sections(tmp_path: Path) -> None:
@@ -25,7 +25,7 @@ def test_import_populates_all_resume_sections(tmp_path: Path) -> None:
     import_seed(database_path, seed_path())
     resume = load_resume(database_path)
 
-    assert resume.profile.name == "Your Name"
+    assert resume.profile.name == "Casey Example"
     assert resume.experience
     assert resume.experience[0].achievements
     assert resume.skill_groups
@@ -98,7 +98,7 @@ def test_public_content_uses_database_and_preserves_order(tmp_path: Path) -> Non
     assert result.degraded is False
     assert result.notice is None
     assert [item.employer for item in result.resume.experience] == [
-        "Example Company",
+        "Example Labs",
         "Earlier Company",
     ]
 
@@ -111,9 +111,9 @@ def test_empty_database_returns_seed_profile_and_degraded_notice(tmp_path: Path)
 
     assert result.degraded is True
     assert result.notice
-    assert result.resume.profile.name == "Your Name"
-    assert result.resume.profile.headline == "Your Professional Headline"
-    assert result.resume.profile.summary.startswith("Replace this placeholder")
+    assert result.resume.profile.name == "Casey Example"
+    assert result.resume.profile.headline == "Sample Product Analyst"
+    assert result.resume.profile.summary == "A clearly fake resume fixture for tests."
     assert result.resume.profile.contact_links
     assert result.resume.experience == []
     assert result.resume.projects == []
@@ -126,7 +126,7 @@ def test_unavailable_database_returns_seed_profile_and_degraded_notice(tmp_path:
 
     assert result.degraded is True
     assert result.notice
-    assert result.resume.profile.name == "Your Name"
+    assert result.resume.profile.name == "Casey Example"
     assert result.resume.profile.contact_links
     assert result.resume.experience == []
 
@@ -139,9 +139,9 @@ def test_homepage_renders_seed_profile_when_database_is_down(tmp_path: Path) -> 
     response = TestClient(app).get("/")
 
     assert response.status_code == 200
-    assert "Your Name" in response.text
-    assert "Your Professional Headline" in response.text
-    assert "Replace this placeholder summary" in response.text
-    assert "mailto:you@example.com" in response.text
+    assert "Casey Example" in response.text
+    assert "Sample Product Analyst" in response.text
+    assert "A clearly fake resume fixture for tests." in response.text
+    assert "mailto:casey@example.test" in response.text
     assert "temporarily unavailable" in response.text
     assert "Internal Server Error" not in response.text

@@ -1,0 +1,96 @@
+{
+  "content_status": "production",
+  "profile": {
+    "id": "fixture-profile",
+    "name": "Casey Example",
+    "headline": "Sample Product Analyst",
+    "summary": "A clearly fake resume fixture for tests.",
+    "contact_links": [
+      {
+        "label": "Email",
+        "url": "mailto:casey@example.test"
+      }
+    ],
+    "location": "Testville",
+    "visible": true
+  },
+  "experience": [
+    {
+      "id": "fixture-experience",
+      "employer": "Example Labs",
+      "title": "Sample Analyst",
+      "start_date": "2020",
+      "end_date": "2021",
+      "current": false,
+      "location": "Testville",
+      "description": "A fake role used by the test suite.",
+      "achievements": [
+        {
+          "id": "fixture-achievement",
+          "text": "Improved a fictional process by 10%.",
+          "display_order": 1,
+          "visible": true
+        }
+      ],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "skill_groups": [
+    {
+      "id": "fixture-skills",
+      "name": "Sample Skills",
+      "skills": [
+        {
+          "id": "fixture-skill",
+          "name": "Testing",
+          "normalized_key": "testing",
+          "proficiency": "Sample",
+          "display_order": 1,
+          "visible": true
+        }
+      ],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "fixture-project",
+      "title": "Sample Project",
+      "summary": "A fictional project for import tests.",
+      "contribution": "Wrote sample test data.",
+      "outcome": "Tests stay independent from production content.",
+      "technologies": [
+        "Example Tool"
+      ],
+      "links": [],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "education": [
+    {
+      "id": "fixture-education",
+      "institution": "Example University",
+      "credential": "BSc, Sample Studies",
+      "start_date": "2016",
+      "end_date": "2020",
+      "details": "Fictional education record.",
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "certifications": [
+    {
+      "id": "fixture-certification",
+      "name": "Sample Certification",
+      "issuer": "Example Institute",
+      "issue_date": "2021",
+      "expiration_date": null,
+      "verification_url": null,
+      "display_order": 1,
+      "visible": true
+    }
+  ]
+}
