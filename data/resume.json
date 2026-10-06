@@ -1,0 +1,100 @@
+{
+  "content_status": "placeholder",
+  "profile": {
+    "id": "profile-primary",
+    "name": "Your Name",
+    "headline": "Your Professional Headline",
+    "summary": "Replace this placeholder summary with a concise overview of your experience and impact.",
+    "contact_links": [
+      {
+        "label": "Email",
+        "url": "mailto:you@example.com"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/your-profile"
+      }
+    ],
+    "location": "Your City",
+    "visible": true
+  },
+  "experience": [
+    {
+      "id": "experience-placeholder",
+      "employer": "Example Company",
+      "title": "Example Role",
+      "start_date": "2020",
+      "end_date": "2024",
+      "current": false,
+      "location": "Example City",
+      "description": "Replace this placeholder role with your professional experience.",
+      "achievements": [
+        {
+          "id": "achievement-placeholder",
+          "text": "Replace this placeholder with a measurable accomplishment.",
+          "display_order": 1,
+          "visible": true
+        }
+      ],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "skill_groups": [
+    {
+      "id": "skills-placeholder",
+      "name": "Core Skills",
+      "skills": [
+        {
+          "id": "skill-placeholder",
+          "name": "Replace with a skill",
+          "normalized_key": "replace-with-a-skill",
+          "proficiency": "Replace",
+          "display_order": 1,
+          "visible": true
+        }
+      ],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-placeholder",
+      "title": "Example Project",
+      "summary": "Replace this placeholder with a project summary.",
+      "contribution": "Replace this placeholder with your contribution.",
+      "outcome": "Replace this placeholder with the project outcome.",
+      "technologies": [
+        "Replace with technology"
+      ],
+      "links": [],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "education": [
+    {
+      "id": "education-placeholder",
+      "institution": "Example Institution",
+      "credential": "Example Credential",
+      "start_date": "2016",
+      "end_date": "2020",
+      "details": "Replace this placeholder with education details.",
+      "display_order": 1,
+      "visible": true
+    }
+  ],
+  "certifications": [
+    {
+      "id": "certification-placeholder",
+      "name": "Example Certification",
+      "issuer": "Example Issuer",
+      "issue_date": "2023",
+      "expiration_date": null,
+      "verification_url": null,
+      "display_order": 1,
+      "visible": true
+    }
+  ]
+}
