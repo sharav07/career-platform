@@ -40,6 +40,7 @@
 - Create: `app/__init__.py`
 - Create: `app/main.py`
 - Create: `tests/conftest.py`
+- Modify: `.gitignore`
 
 **Interfaces:**
 - Produces `app.main:create_app() -> FastAPI` and a module-level `app` instance for Uvicorn.
@@ -51,7 +52,8 @@ Declare the Python version, runtime dependencies, pytest configuration, and UV
 metadata in `pyproject.toml`. Implement `create_app(database_path: Path,
 seed_path: Path) -> FastAPI` in `app/main.py`, register `GET /health`, and
 expose `app = create_app(...)` with paths obtained from environment variables
-or repository defaults.
+or repository defaults. Add `resume.db` and `*.db` to `.gitignore` so local
+SQLite runtime files are not committed.
 
 - [ ] **Step 2: Run the foundation checks**
 
@@ -81,7 +83,7 @@ through the application factory without requiring a database connection.
 
 **Interfaces:**
 - `app.models.ResumeSeed` is the root Pydantic model.
-- `app.seed.load_seed(path: Path) -> ResumeSeed` parses JSON and raises a
+- `app.seed.load_seed(path: str | Path) -> ResumeSeed` parses JSON and raises a
   clear validation error for malformed or incomplete content.
 - `ResumeSeed.profile` exposes `name`, `headline`, `summary`, and `contact_links`.
 
@@ -95,9 +97,11 @@ an actionable path-specific error.
 
 - [ ] **Step 2: Add the checked-in resume seed**
 
-Populate `data/resume.json` with representative valid records for every v1
-content category, including the profile header and contact links. Keep the file
-the editorial source for both import and the resilience fallback.
+Populate `data/resume.json` with clearly marked placeholder records for every v1
+content category, including the profile header and contact links. Add a comment
+in `README.md` explaining that the seed content is placeholder data to be
+replaced before production use. Keep the file the editorial source for both
+import and the resilience fallback.
 
 - [ ] **Step 3: Run the seed-load check**
 
@@ -129,7 +133,7 @@ covered by the seed-import test in Task 3.
 **Interfaces:**
 - `app.db.initialize_database(path: Path) -> None` creates all v1 tables if
   missing.
-- `app.importer.import_seed(database_path: Path, seed_path: Path) -> None`
+- `app.importer.import_seed(database_path: str | Path, seed_path: str | Path) -> None`
   validates the seed, initializes SQLite, and deterministically replaces/upserts
   the single public dataset in one transaction.
 - `app.db.load_resume(database_path: Path) -> ResumeSeed` returns the complete
@@ -329,7 +333,7 @@ unavailable.
 - Create: `app/cli.py`
 - Create: `deploy/career-platform.service`
 - Create: `deploy/nginx.conf`
-- Create: `README.md`
+- Modify: `README.md`
 
 **Interfaces:**
 - `uv run python -m app.cli import-seed --database PATH --seed PATH` runs the
@@ -348,8 +352,9 @@ status.
 Configure systemd to run `uv run uvicorn app.main:app --host 127.0.0.1 --port
 8000` from the application directory with restart-on-failure behavior. Configure
 Nginx to listen on the public HTTP endpoint and proxy to `127.0.0.1:8000`.
-Document installation, environment paths, database initialization/import, and
-service restart steps in `README.md`.
+Update the existing `README.md` with installation, environment paths, database
+initialization/import, placeholder-seed replacement, and service restart steps;
+do not overwrite unrelated existing README content.
 
 - [ ] **Step 3: Run the configuration checks**
 
