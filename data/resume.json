@@ -1,100 +1,404 @@
 {
-  "content_status": "placeholder",
+  "content_status": "production",
   "profile": {
     "id": "profile-primary",
-    "name": "Your Name",
-    "headline": "Your Professional Headline",
-    "summary": "Replace this placeholder summary with a concise overview of your experience and impact.",
+    "name": "Sharav Jiwrajka",
+    "headline": "",
+    "summary": "",
     "contact_links": [
       {
         "label": "Email",
-        "url": "mailto:you@example.com"
+        "url": "mailto:sjiwrajk@lion.lmu.edu"
       },
       {
         "label": "LinkedIn",
-        "url": "https://www.linkedin.com/in/your-profile"
+        "url": "https://www.linkedin.com/in/sharav-jiwrajka-910007313/"
+      },
+      {
+        "label": "Website",
+        "url": "https://www.shersharav.com"
       }
     ],
-    "location": "Your City",
+    "location": "Los Angeles, CA",
     "visible": true
   },
   "experience": [
     {
-      "id": "experience-placeholder",
-      "employer": "Example Company",
-      "title": "Example Role",
-      "start_date": "2020",
-      "end_date": "2024",
+      "id": "experience-laedc",
+      "employer": "Los Angeles Economic Development Corporation (LAEDC)",
+      "title": "Operations Intern",
+      "start_date": "June 2026",
+      "end_date": "August 2026",
       "current": false,
-      "location": "Example City",
-      "description": "Replace this placeholder role with your professional experience.",
+      "location": "Los Angeles, CA",
+      "description": "",
       "achievements": [
         {
-          "id": "achievement-placeholder",
-          "text": "Replace this placeholder with a measurable accomplishment.",
+          "id": "achievement-laedc-1",
+          "text": "Conducted market validation research and built a go-to-market strategy report for SuweVerse, a children's game startup, covering customer research and a 12-month growth roadmap",
           "display_order": 1,
           "visible": true
-        }
-      ],
-      "display_order": 1,
-      "visible": true
-    }
-  ],
-  "skill_groups": [
-    {
-      "id": "skills-placeholder",
-      "name": "Core Skills",
-      "skills": [
+        },
         {
-          "id": "skill-placeholder",
-          "name": "Replace with a skill",
-          "normalized_key": "replace-with-a-skill",
-          "proficiency": "Replace",
-          "display_order": 1,
+          "id": "achievement-laedc-2",
+          "text": "Built a vendor sourcing tracker evaluating board game and mat manufacturers across cost, location, and sustainable materials",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-laedc-3",
+          "text": "Delivered a final internship presentation to LMU Business School and LAEDC stakeholders summarizing strategic recommendations",
+          "display_order": 3,
           "visible": true
         }
       ],
       "display_order": 1,
       "visible": true
-    }
-  ],
-  "projects": [
+    },
     {
-      "id": "project-placeholder",
-      "title": "Example Project",
-      "summary": "Replace this placeholder with a project summary.",
-      "contribution": "Replace this placeholder with your contribution.",
-      "outcome": "Replace this placeholder with the project outcome.",
-      "technologies": [
-        "Replace with technology"
+      "id": "experience-ananda",
+      "employer": "Ananda Holdings Inc.",
+      "title": "Operations Intern",
+      "start_date": "July 2026",
+      "end_date": "August 2026",
+      "current": false,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-ananda-1",
+          "text": "Built an EV charger contract analysis and appliance vendor comparison — covering phased rollout costs, rebate eligibility, and supplier spec sheets — to support procurement decisions for a 55-unit multifamily development",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-ananda-2",
+          "text": "Designed and built the company website from scratch, including site architecture, page content, and team bios",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-ananda-3",
+          "text": "Built a prospective tenant lead database categorizing leads by housing voucher/grant type and lease-up stage (inquiry, toured, applied) to streamline lease-up tracking",
+          "display_order": 3,
+          "visible": true
+        }
       ],
-      "links": [],
-      "display_order": 1,
+      "display_order": 2,
+      "visible": true
+    },
+    {
+      "id": "experience-off-campus-universe",
+      "employer": "Off Campus Universe",
+      "title": "Part Time Sales Representative",
+      "start_date": "November 2025",
+      "end_date": null,
+      "current": true,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-off-campus-universe-1",
+          "text": "Track weekly availability of 5-10 off-campus housing listings, posting inventory across social media channels.",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-off-campus-universe-2",
+          "text": "Make outbound calls to prospective student renters to introduce available apartments and current leasing promotions.",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-off-campus-universe-3",
+          "text": "Follow up with leads and maintain CRM and lead management tools to track prospects.",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 3,
+      "visible": true
+    },
+    {
+      "id": "experience-schbang",
+      "employer": "Schbang Digital Solutions Private Limited",
+      "title": "Intern – Brand and Business Solutions Strategist",
+      "start_date": "May 2025",
+      "end_date": "July 2025",
+      "current": false,
+      "location": "Mumbai, India",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-schbang-1",
+          "text": "Developed positioning, messaging frameworks, and go-to-market strategies for 10+ brand campaigns across FMCG, fashion, and lifestyle — translating consumer insights into creative strategy decks for cross-functional teams",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-schbang-2",
+          "text": "Synthesized campaign performance data, audience insights, and competitive benchmarks into strategic recommendations that shaped brand positioning, content direction, and partnership decisions",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-schbang-3",
+          "text": "Tracked 5+ campaign KPIs — impressions, reach, CTR, and conversions — to surface audience trends and deliver data-backed insights that improved campaign ROI and informed creative adjustments",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 4,
+      "visible": true
+    },
+    {
+      "id": "experience-raheja",
+      "employer": "Raheja Universal Private Limited",
+      "title": "Intern – Land Development and Marketing",
+      "start_date": "June 2024",
+      "end_date": "August 2024",
+      "current": false,
+      "location": "Mumbai, India",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-raheja-1",
+          "text": "Evaluated the impact of 2 major infrastructure projects (Mumbai Coastal Road and Metro) on residential pricing across 5 Mumbai micro-markets, identifying high-appreciation zones through location and demand analysis.",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-raheja-2",
+          "text": "Built market and financial models evaluating residential supply, pricing dynamics, and buyer segments — translating findings into positioning strategy for a luxury development launch.",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-raheja-3",
+          "text": "Prepared revenue projections and marketing ROI analyses in Excel to support business development proposals and client acquisition.",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 5,
+      "visible": true
+    },
+    {
+      "id": "experience-alok",
+      "employer": "Alok Industries Limited",
+      "title": "Intern – Apparel Development and Marketing",
+      "start_date": "July 2023",
+      "end_date": "September 2023",
+      "current": false,
+      "location": "Mumbai, India",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-alok-1",
+          "text": "Distilled 3 global runway trends and consumer behaviour data from WGSN into product diversification recommendations — identifying premium basics, luxury athletics, and nightwear as high-growth categories.",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-alok-2",
+          "text": "Supported BOM reviews for 25 garment samples, informing pricing and feasibility analysis for new product lines.",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-alok-3",
+          "text": "Facilitated cross-functional feedback loops across design, engineering, and marketing to iterate product approvals.",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 6,
+      "visible": true
+    },
+    {
+      "id": "activity-oiss",
+      "employer": "LMU Office of International Students & Scholars (OISS)",
+      "title": "International Orientation Leader",
+      "start_date": "August 2026",
+      "end_date": null,
+      "current": true,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-oiss-1",
+          "text": "Hosted icebreaker sessions for incoming international and transfer students to ease their transition to campus",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-oiss-2",
+          "text": "Organized and led cultural awareness sessions as part of new student orientation programming",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-oiss-3",
+          "text": "Supported orientation programming for an incoming cohort of 150 international and transfer students",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 7,
+      "visible": true
+    },
+    {
+      "id": "activity-library",
+      "employer": "William Hannon Library, LMU",
+      "title": "Part Time Outreach & Engagement Assistant",
+      "start_date": "January 2026",
+      "end_date": "May 2026",
+      "current": false,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-library-1",
+          "text": "Assist in managing operations for 10+ events, including logistics, guest registration, and on-site coordination.",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-library-2",
+          "text": "Design promotional materials and contribute to outreach and social media efforts to drive student engagement.",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-library-3",
+          "text": "Maintain data of event attendance and feedback by collaborating with library staff across departments.",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 8,
+      "visible": true
+    },
+    {
+      "id": "activity-marketing-society",
+      "employer": "LMU Marketing Society",
+      "title": "Professional Development Board",
+      "start_date": "January 2026",
+      "end_date": null,
+      "current": true,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-marketing-society-1",
+          "text": "Source and curate student job and internship opportunities relevant to marketing and business roles.",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-marketing-society-2",
+          "text": "Connect local small businesses with student-led marketing teams to support real-world projects.",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-marketing-society-3",
+          "text": "Facilitate collaborations that deliver hands-on experience for students and fresh creative input for businesses.",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 9,
+      "visible": true
+    },
+    {
+      "id": "activity-lions-motorsports",
+      "employer": "LMU Lions Motorsports",
+      "title": "Marketing Lead",
+      "start_date": "August 2025",
+      "end_date": null,
+      "current": true,
+      "location": "Los Angeles, CA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-lions-motorsports-1",
+          "text": "Lead digital strategy and brand execution to grow visibility for LMU's Formula SAE team",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-lions-motorsports-2",
+          "text": "Design and source team merchandise, coordinating with vendors on pricing, materials, and production",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-lions-motorsports-3",
+          "text": "Partner with developers on website content and structure to strengthen team presence and sharpen sponsor-facing brand narrative",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 10,
+      "visible": true
+    },
+    {
+      "id": "activity-sigma-phi-epsilon",
+      "employer": "Sigma Phi Epsilon (ΣΦΕ), Washington Beta Chapter",
+      "title": "Member – PC 24",
+      "start_date": "August 2024",
+      "end_date": "May 2025",
+      "current": false,
+      "location": "Seattle, WA",
+      "description": "",
+      "achievements": [
+        {
+          "id": "achievement-sigma-phi-epsilon-1",
+          "text": "Participate in alumni, professional, and chapter-led events to build a cross-industry network",
+          "display_order": 1,
+          "visible": true
+        },
+        {
+          "id": "achievement-sigma-phi-epsilon-2",
+          "text": "Contribute to chapter initiatives and team activities, emphasizing collaboration and accountability",
+          "display_order": 2,
+          "visible": true
+        },
+        {
+          "id": "achievement-sigma-phi-epsilon-3",
+          "text": "Engage in leadership and professional development programming aligned with Sigma Phi Epsilon values",
+          "display_order": 3,
+          "visible": true
+        }
+      ],
+      "display_order": 11,
       "visible": true
     }
   ],
+  "skill_groups": [],
+  "projects": [],
   "education": [
     {
-      "id": "education-placeholder",
-      "institution": "Example Institution",
-      "credential": "Example Credential",
-      "start_date": "2016",
-      "end_date": "2020",
-      "details": "Replace this placeholder with education details.",
+      "id": "education-lmu",
+      "institution": "Loyola Marymount University",
+      "credential": "BBA, Information Systems & Business Analytics",
+      "start_date": "2025",
+      "end_date": "2027",
+      "details": "",
       "display_order": 1,
+      "visible": true
+    },
+    {
+      "id": "education-uw",
+      "institution": "University of Washington, Seattle",
+      "credential": "Pre-major, Business Administration",
+      "start_date": "2023",
+      "end_date": "2025",
+      "details": "",
+      "display_order": 2,
       "visible": true
     }
   ],
-  "certifications": [
-    {
-      "id": "certification-placeholder",
-      "name": "Example Certification",
-      "issuer": "Example Issuer",
-      "issue_date": "2023",
-      "expiration_date": null,
-      "verification_url": null,
-      "display_order": 1,
-      "visible": true
-    }
-  ]
+  "certifications": []
 }
