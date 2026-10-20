@@ -215,9 +215,103 @@ a:focus-visible {
   padding: 0.35rem 0.8rem;
 }
 
+.site-footer {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: 0 auto;
+  max-width: 68rem;
+  padding: 0 1.5rem 3rem;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.link-button {
+  background: none;
+  border: 0;
+  color: #1d4ed8;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.link-button:focus-visible,
+.consent-banner button:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
+.consent-banner {
+  background: #ffffff;
+  border: 1px solid #dce3ec;
+  border-radius: 0.75rem;
+  bottom: 1rem;
+  box-shadow: 0 1rem 2.5rem rgba(36, 52, 71, 0.18);
+  left: 50%;
+  max-width: 40rem;
+  padding: 1rem 1.25rem;
+  position: fixed;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  z-index: 10;
+}
+
+.consent-banner[hidden] {
+  display: none;
+}
+
+.consent-banner p {
+  margin: 0 0 0.85rem;
+}
+
+.consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.consent-actions button {
+  background: #ffffff;
+  border: 1px solid #94a3b8;
+  border-radius: 0.5rem;
+  color: #172033;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 650;
+  padding: 0.5rem 1rem;
+}
+
+.consent-actions button:hover {
+  background: #f1f5f9;
+}
+
+.privacy-page {
+  background: #ffffff;
+  border: 1px solid #dce3ec;
+  border-radius: 1rem;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.privacy-page h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.privacy-page h2 {
+  font-size: 1.2rem;
+  margin: 2rem 0 0.5rem;
+}
+
 @media (max-width: 42rem) {
   .page-shell {
     padding: 1rem 0.75rem 2.5rem;
+  }
+
+  .site-footer {
+    padding: 0 0.75rem 6rem;
   }
 
   .profile-header {

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy{% endblock %}
+
+{% block content %}
+<article class="privacy-page">
+  <p class="eyebrow">Privacy</p>
+  <h1>How this site handles your data</h1>
+  <p class="metadata">Last updated October 20, 2026</p>
+
+  <p>This is the personal resume site of Sharav Jiwrajka. It has no accounts, no forms, and no comments, so it does not ask you for any personal information.</p>
+
+  <h2>What is collected</h2>
+  <p><strong>Server logs.</strong> Like most web servers, the server that hosts this site can record standard request details: your IP address, the time, the page you asked for, and your browser type. They help keep the site running and diagnose problems.</p>
+  {% if ga_measurement_id %}
+  <p><strong>Google Analytics, only if you accept.</strong> If you click "Accept analytics" on the banner, the site loads Google Analytics 4. It records page views and clicks on links that lead to other websites, including the address of the link. Google also receives your IP address, which it uses to estimate your general location, plus details about your browser and device. Google Analytics sets cookies named <code>_ga</code> and <code>_ga_</code> followed by an ID. They let it recognize a repeat visit from the same browser.</p>
+
+  <h2>Why</h2>
+  <p>I use the Google Analytics data to see whether anyone visits the site and whether links to profiles like LinkedIn and GitHub get clicked.</p>
+
+  <h2>Who receives it</h2>
+  <p>Google receives the analytics data and processes it for me under the Google Analytics terms. Nothing is sent to Google, and no Google script is loaded, until you accept.</p>
+
+  <h2>Your choices</h2>
+  <ul>
+    <li>Click "Decline" and the analytics script never loads. The site works the same.</li>
+    <li>Change your mind at any time with "Privacy choices" in the page footer. Choosing "Decline" there turns analytics off and removes the Google Analytics cookies this site set in your browser.</li>
+    <li>Your choice is saved in your browser's local storage for this site only. If you clear your site data, the banner appears again.</li>
+    <li>You can also block cookies or analytics scripts in your browser settings. The site does not depend on them.</li>
+  </ul>
+  {% else %}
+  <p>This site does not currently use analytics or set cookies.</p>
+  {% endif %}
+
+  <p>Questions about this page? Use the contact links on the <a href="{{ url_for('resume_page') }}">home page</a>.</p>
+</article>
+{% endblock %}

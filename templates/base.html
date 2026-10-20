@@ -6,9 +6,29 @@
     <title>{% block title %}{{ content.resume.profile.name }}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
   </head>
-  <body>
+  <body data-ga-id="{{ ga_measurement_id }}">
     <main class="page-shell">
       {% block content %}{% endblock %}
     </main>
+    <footer class="site-footer">
+      <nav aria-label="Site">
+        <a href="{{ url_for('privacy_page') }}">Privacy</a>
+        {% if ga_measurement_id %}<button type="button" id="consent-reopen" class="link-button">Privacy choices</button>{% endif %}
+      </nav>
+    </footer>
+    {% if ga_measurement_id %}
+    <div id="consent-banner" class="consent-banner" role="dialog" aria-label="Analytics choice" hidden>
+      <p>
+        This site can use Google Analytics to count page views and clicks on links to other sites.
+        Nothing is sent to Google unless you accept.
+        <a href="{{ url_for('privacy_page') }}">Privacy details</a>
+      </p>
+      <div class="consent-actions">
+        <button type="button" id="consent-accept">Accept analytics</button>
+        <button type="button" id="consent-decline">Decline</button>
+      </div>
+    </div>
+    <script src="{{ url_for('static', path='analytics.js') }}" defer></script>
+    {% endif %}
   </body>
 </html>

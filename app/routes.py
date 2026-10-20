@@ -5,10 +5,14 @@ from __future__ import annotations
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
+from app.config import GA_MEASUREMENT_ID
 from app.content import load_public_content
 
 
 templates = Jinja2Templates(directory="templates")
+# Empty string means analytics is off. Templates only show the consent banner
+# and the "Privacy choices" control when this is set.
+templates.env.globals["ga_measurement_id"] = GA_MEASUREMENT_ID
 router = APIRouter()
 
 
@@ -23,3 +27,8 @@ def resume_page(request: Request):
         name="resume.html",
         context={"content": content},
     )
+
+
+@router.get("/privacy")
+def privacy_page(request: Request):
+    return templates.TemplateResponse(request=request, name="privacy.html")
