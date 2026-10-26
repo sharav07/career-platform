@@ -36,7 +36,8 @@ Status key: **done** = evidence exists and was checked, **partial** = evidence e
 
 ## 5. Verified change through Railway
 
-- **not done at the time of writing.** Railway's GitHub app was not connected (the dashboard said "Could not load branches"), so a push to `main` does not deploy. The first Railway deployment was made from the public repository URL; its build log names commit `0786fb9`. If the GitHub connection is completed, this section will link the commit, the deployment, and the live result.
+- Commit `f7a1b39` (pushed 12:19:41 UTC 2026-10-26) to Railway deployment to live page, with the live check at 12:20:53 UTC: [evidence/railway-migration.md](evidence/railway-migration.md) section 8. A second commit, `9bf118f`, deployed the same way. **done**
+- Recovery explanation (code and data): [README rollback](../README.md#rollback). **done**
 
 ## 6. Zoho email
 
@@ -54,9 +55,9 @@ Status key: **done** = evidence exists and was checked, **partial** = evidence e
 
 ## Other items to know
 
-- Railway Postgres password rotation (the instructor's follow-up to the Oct 21 incident): **not done**. It needs Railway builds to run, and I have not recorded it.
+- Railway Postgres password rotation (the instructor's follow-up to the Oct 21 incident): **not done** at the time of writing. Trial builds are running again (deployments above succeeded), so it can now be done and recorded.
 - Ex04 HTTPS write-up in my own words: [how-this-site-is-secured.md](how-this-site-is-secured.md).
 
 ## Commit used for the checks
 
-Last code commit before the final index edit: see `git log` on `main`; the Railway-built commit was `0786fb9`.
+Last code commit before the final index edit: see `git log` on `main`. Railway deployments came from `0786fb9` (first deploy), `f7a1b39` and `9bf118f` (auto-deployed after the GitHub connection).

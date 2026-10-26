@@ -88,6 +88,22 @@ The brief wants the root record DNS only. I toggled it to DNS only (through the 
 
 **Current state (honest):** the root is Proxied, so the certificate visitors see is Cloudflare's, not one issued by Railway. That does not meet the brief's DNS-only requirement. Retrying Railway's certificate later is the open step; if it succeeds I will switch the root back to DNS only and record the certificate subject and dates here. Until then, treat that part as **unverified / not met**.
 
-## 8. Not yet done at the time of writing
+## 8. Verified change: GitHub push to Railway deployment to live site
 
-Verified change deployed through Railway's GitHub connection (the GitHub app was not yet installed), Postgres password rotation (the instructor's follow-up to Railway's Oct 21 incident), and a Railway-issued certificate for the root.
+Setup: Railway's GitHub app was installed (by me, at 05:1x PT), then in the service Settings, Source, the "Auto deploy is disabled" row got **Enable**, and it now reads "Auto deploys when pushed to GitHub" for branch `main`. (Before that the service was deployed from the public repo URL, and the dashboard said "Could not load branches".)
+
+Reviewed change (one footer line, one CSS rule, one test; tests 16 passed, 3 skipped before pushing):
+
+| Step | Observation |
+| --- | --- |
+| Commit | `f7a1b39` "feat: add hosting note to footer", pushed to `main` at 12:19:41 UTC |
+| Railway | A new deployment named after that commit message appeared as "Building" about 15 seconds later, then **Deployment successful**; the previous deployment went to "Removing" |
+| Live check | 12:20:53 UTC: `https://sharavjiwrajka.me/` returned 200, `server: cloudflare`, the page contains "Served from Railway with PostgreSQL.", the Azure-only headline, and 13 resume entries, with no 503. The database data survived the redeploy |
+
+A second push confirms the loop: commit `9bf118f` (pushed 12:21:32 UTC) deployed the same way. It added `scripts/add_seed_projects.py` and hid the empty Skills heading. At 12:22:53 UTC I ran the script in the Railway service console; it printed `inserted project 'project-career-platform'`, and on a second run `already present; skipped`. At 12:23:07 UTC the live page showed the project, no "No projects published yet", no Skills heading, and 14 entries. This project row is a content update made on Railway **after** the data comparison in section 3, so that comparison stays a pure copy of Azure.
+
+Recovery: see the README rollback section. Railway keeps earlier deployments in its Deployments list; redeploying one restores that code. The database is separate and is not rolled back by a code redeploy.
+
+## 9. Not yet done at the time of writing
+
+Postgres password rotation (the instructor's follow-up to Railway's Oct 21 incident), and a Railway-issued certificate for the root.

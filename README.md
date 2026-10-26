@@ -32,12 +32,12 @@ uv run uvicorn app.main:app --reload
 
 Configuration (all optional): `DATABASE_URL` (PostgreSQL URL, wins when set), `DATABASE_PATH` (SQLite file, default `resume.db`), `SEED_PATH`, `GA_MEASUREMENT_ID`.
 
-Update the live site: push to `main`. Railway builds from the `main` branch of this repository (see "Deployment" below for what is and is not verified). The Azure VM is updated by `git pull` over SSH and is kept only as the rollback target.
+Update the live site: push to `main`. Railway's GitHub connection builds and deploys every push to `main` (verified on 2026-10-26, see [railway-migration.md](docs/evidence/railway-migration.md) section 8). The Azure VM is updated by `git pull` over SSH and is kept only as the rollback target.
 
 ## Deployment
 
 - Azure (original): Ubuntu VM, Nginx on 80/443, Uvicorn with 2 workers under systemd on `127.0.0.1:8000`, SQLite file, Let's Encrypt certificate. Evidence: [ex03](docs/evidence/ex03.md), [how this site is secured](docs/how-this-site-is-secured.md), [Azure plan](docs/superpowers/plans/2026-09-24-azure-vm-migration.md).
-- Railway (current): web service built from GitHub with Railpack, managed PostgreSQL with a volume, `railway.toml` for the start command and health check. Evidence: [railway-migration.md](docs/evidence/railway-migration.md), plan: [2026-10-26-railway-migration.md](docs/superpowers/plans/2026-10-26-railway-migration.md).
+- Railway (current): web service built from GitHub with Railpack, managed PostgreSQL with a volume, `railway.toml` for the start command and health check. Auto-deploys on push to `main`. Evidence: [railway-migration.md](docs/evidence/railway-migration.md), plan: [2026-10-26-railway-migration.md](docs/superpowers/plans/2026-10-26-railway-migration.md).
 
 Diagrams (Azure, Railway, email and analytics paths): [docs/architecture.md](docs/architecture.md).
 
@@ -108,7 +108,7 @@ Checked 2026-10-26 unless noted.
 ## Remaining limitations
 
 - The root domain currently uses Cloudflare's proxy (orange cloud) with Cloudflare's certificate, not Railway's own certificate. The brief asks for DNS only. See failure 4 and the evidence file for the current state.
-- The pre-deploy data load in `railway.toml` did not run on Railway; the load was done by hand from the console. It is safe to re-run (it skips a non-empty database).
+- The pre-deploy data load in `railway.toml` did not run on Railway; the load was done by hand from the console. It is safe to re-run (it skips a non-empty database). The project entry was likewise added from the console with `scripts/add_seed_projects.py`.
 - No schema migration tooling. The schema is created with `CREATE TABLE IF NOT EXISTS`.
 - Railway database backups are not configured. Data loss on the trial is possible; the Azure export in `data/migrations/` is the only copy besides the live databases.
 - Railway reported that environment variables may have been read in its Oct 21 incident. The instructor asked to rotate the Postgres password and redeploy once trial builds are back. Status is in the evidence file.
