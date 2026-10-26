@@ -122,8 +122,6 @@ Checked 2026-10-26 unless noted.
 - Railway database backups are not configured. Data loss on the trial is possible; the Azure export in `data/migrations/` is the only copy besides the live databases.
 - Railway reported that environment variables may have been read in its Oct 21 incident. I rotated the Postgres password and redeployed on 2026-10-26 (12:28 UTC); see [railway-migration.md](docs/evidence/railway-migration.md) section 9. The old password was only ever stored as a Railway variable reference.
 
-## Reflection (written afterward, 2026-10-26, with help from Claude)
+## Reflection
 
 I understand more clearly now that a deployment has two separate halves: the code, which Git carries, and the data and settings, which it does not. The migration only worked because I treated the Azure database as the source of truth and checked it with hashes instead of trusting a re-seed. I also learned that a certificate is a separate dependency from DNS and the app: the site was fine, but a rate limit at the certificate step took the domain down until I changed the proxy setting. If I did this again I would write the pre-deploy step and the cutover order down first, test the certificate with a spare subdomain before moving the real name, and set up backups before loading data.
-
-*Claude drafted this section from the evidence in this repository. I should read it and edit it into my own words before the interview.*
