@@ -2,6 +2,10 @@
 
 All times are 2026-10-26, Pacific unless marked UTC (UTC = Pacific + 7 hours). Plan: [2026-10-26-railway-migration.md](../superpowers/plans/2026-10-26-railway-migration.md). Diagrams: [architecture.md](../architecture.md).
 
+## Who did what
+
+On 2026-10-26 I worked with Claude (Anthropic's AI assistant, using a coding environment and my own Chrome browser) at my direction. Claude wrote the code changes, scripts and docs, ran the tests, and operated the Railway dashboard and its console in my browser. I ran the Azure SSH export command in my own Terminal, signed in to Railway, Cloudflare and GitHub myself, installed Railway's GitHub app, approved each step that changed my accounts, and saved the Cloudflare DNS changes (an automatic safety check stopped Claude from saving DNS changes itself). Where this file says "I" for a dashboard or console action, Claude did it in my browser at my request. Claude's session is also named in the commit trailers of the commits it made.
+
 Railway project `sublime-laughter`, environment `production`, region US East. Services: `Postgres` (with volume) and `career-platform` (built from this repo's `main`). Test URL before any DNS change: `https://career-platform-production-eae0.up.railway.app`.
 
 ## 1. The real data change (Azure only, not in Git)
@@ -64,24 +68,24 @@ Rendered page comparison, the same script run in the browser on each site (visib
 
 ## 5. What did not work, and what I changed
 
-- `railway.toml` set `preDeployCommand`, but the Railway build log shows only the start command and no pre-deploy step, and the database stayed empty. Railway's settings page says Config as Code is deprecated and that services that never used it cannot opt in, so I do not rely on it. I ran the load from the service console instead. The loader skips a non-empty database, so a later redeploy cannot overwrite data.
+- `railway.toml` set `preDeployCommand`, but the Railway build log shows only the start command and no pre-deploy step, and the database stayed empty. Railway's settings page says Config as Code is deprecated and that services that never used it cannot opt in, so Claude no longer relied on it and ran the load from the service console instead. The loader skips a non-empty database, so a later redeploy cannot overwrite data.
 - Railway's GitHub App was not installed on my account ("Could not load branches"). I deployed from the public repo URL. Auto-deploy on push needs the app, which I connect before the verified-change step (see the README).
 
 ## 6. Cutover: domain to Railway (UTC times, 2026-10-26)
 
 - ~11:59: added `sharavjiwrajka.me` as a custom domain on the Railway service (port 8080). Railway asked for `CNAME @ 6zzkzaxh.up.railway.app` and TXT `_railway-verify`.
-- By 12:02 the Cloudflare zone already had both records (the root `A` record to the Azure IP was gone) with the root CNAME set to **Proxied**. I did not make that edit; I found it that way. Mail records (MX, SPF, DKIM, DMARC) were untouched throughout.
+- By 12:02 the Cloudflare zone already had both records (the root `A` record to the Azure IP was gone) with the root CNAME set to **Proxied**. Neither Claude nor I recorded who made that edit; the records were already there when we looked. Mail records (MX, SPF, DKIM, DMARC) were untouched throughout.
 - 12:03:26: `https://sharavjiwrajka.me/` returned HTTP 200 from Railway with `server: cloudflare`, the Azure-only headline, and the new "No projects published yet." text (which only the new code has). So the live name was already on Railway.
 - Cloudflare DNS records after my checks: root CNAME to Railway, `www` proxied, mail records intact.
 
 ## 7. TLS incident: root set to DNS only
 
-The brief wants the root record DNS only. I toggled it to DNS only (through the Cloudflare dashboard; the final save was done by me asking you to click, because the dashboard edit was blocked for me).
+The brief wants the root record DNS only. Claude switched the toggle in the Cloudflare edit form, but its attempt to save was blocked by an automatic safety check on DNS changes. I saved the change myself.
 
 - 12:10:38: DNS-over-HTTPS check: the root answered `69.46.46.99` (TTL 60, a Railway address, not Cloudflare's `104.21.x`/`172.67.x`), `www` answered Cloudflare proxy IPs, MX unchanged.
 - 12:10:46: browser requests to `https://sharavjiwrajka.me` failed ("Failed to fetch", then Chrome's error page). The site was effectively down over HTTPS.
 - Railway's domain status (read from the service settings) said: **"Failed to issue TLS certificate"**, **"Let's Encrypt rate limit reached. Please wait before retrying."**, and **"This error cannot be automatically retried. Please check your DNS configuration or contact support."**
-- Hypothesis: the domain hit a Let's Encrypt rate limit. The Azure certificate was issued by Certbot on 2026-10-08, and earlier Railway attempts while the record was Proxied may have counted too. **I did not verify which limit it was or when it resets** (I could not read certificate-transparency logs).
+- Hypothesis: the domain hit a Let's Encrypt rate limit. The Azure certificate was issued by Certbot on 2026-10-08, and earlier Railway attempts while the record was Proxied may have counted too. **Not verified: which limit it was or when it resets** (Claude could not read certificate-transparency logs).
 - Repair: set the root record back to **Proxied**. Cloudflare then serves its own certificate for the root.
 - 12:14:24: repeated check: `https://sharavjiwrajka.me/` returned 200, `server: cloudflare`, headline present, `/health` 200. After the change Railway's domain panel said "Cloudflare proxy detected" with no certificate error.
 - `https://www.sharavjiwrajka.me/?x=1` and `http://www.sharavjiwrajka.me/` both ended at `https://sharavjiwrajka.me/` in the browser. The query string `?x=1` was not preserved.
@@ -100,24 +104,24 @@ Reviewed change (one footer line, one CSS rule, one test; tests 16 passed, 3 ski
 | Railway | A new deployment named after that commit message appeared as "Building" about 15 seconds later, then **Deployment successful**; the previous deployment went to "Removing" |
 | Live check | 12:20:53 UTC: `https://sharavjiwrajka.me/` returned 200, `server: cloudflare`, the page contains "Served from Railway with PostgreSQL.", the Azure-only headline, and 13 resume entries, with no 503. The database data survived the redeploy |
 
-A second push confirms the loop: commit `9bf118f` (pushed 12:21:32 UTC) deployed the same way. It added `scripts/add_seed_projects.py` and hid the empty Skills heading. At 12:22:53 UTC I ran the script in the Railway service console; it printed `inserted project 'project-career-platform'`, and on a second run `already present; skipped`. At 12:23:07 UTC the live page showed the project, no "No projects published yet", no Skills heading, and 14 entries. This project row is a content update made on Railway **after** the data comparison in section 3, so that comparison stays a pure copy of Azure.
+A second push confirms the loop: commit `9bf118f` (pushed 12:21:32 UTC) deployed the same way. It added `scripts/add_seed_projects.py` and hid the empty Skills heading. At 12:22:53 UTC Claude ran the script in the Railway service console; it printed `inserted project 'project-career-platform'`, and on a second run `already present; skipped`. At 12:23:07 UTC the live page showed the project, no "No projects published yet", no Skills heading, and 14 entries. This project row is a content update made on Railway **after** the data comparison in section 3, so that comparison stays a pure copy of Azure.
 
 Recovery: see the README rollback section. Railway keeps earlier deployments in its Deployments list; redeploying one restores that code. The database is separate and is not rolled back by a code redeploy.
 
 ## 9. Postgres password rotation (instructor follow-up to Railway's Oct 21 incident) and the outage it caused
 
-The instructor's announcement asked for three things once Trial builds were back: rotate the Postgres password, redeploy the web service so it picks up the new `DATABASE_URL`, and write down what I did and when. Trial builds were running (sections 8 deployments succeeded).
+The instructor's announcement asked for three things once Trial builds were back: rotate the Postgres password, redeploy the web service so it picks up the new `DATABASE_URL`, and write down what was done and when. Trial builds were running (sections 8 deployments succeeded).
 
 | Time (UTC) | What happened |
 | --- | --- |
-| 12:28:51 | In the Postgres service, Database, Config, I clicked **Regenerate** next to the password and confirmed. Railway's dialog said it would update the environment variables, redeploy the database, and redeploy services using the password |
+| 12:28:51 | In the Postgres service, Database, Config, Claude clicked **Regenerate**, which I had approved, next to the password and confirmed. Railway's dialog said it would update the environment variables, redeploy the database, and redeploy services using the password |
 | 12:29:56 | `https://sharavjiwrajka.me/` returned **503** "Projects temporarily unavailable". The web container that was already running still held the old password |
 | ~12:28 to 12:30 | Railway's automatic redeploy of the web service **failed during build**: `No start command detected. Specify a start command` (Railpack). So nothing restarted with the new password |
 | 12:30:23 | Still 503. Both the `/` 503 and `/health` 200 matched the deliberate-failure design: profile visible, no sample data, health check still OK |
-| ~12:31 | Diagnosis: that build did not read `railway.toml` (Railway marks Config as Code deprecated, and the earlier builds that did read it were luck, not a guarantee). I set the **Custom Start Command** directly in the service Settings, Deploy: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --proxy-headers --forwarded-allow-ips='*'`, and deployed once |
+| ~12:31 | Diagnosis: that build did not read `railway.toml` (Railway marks Config as Code deprecated, and the earlier builds that did read it were luck, not a guarantee). Claude set the **Custom Start Command** directly in the service Settings, Deploy: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --proxy-headers --forwarded-allow-ips='*'`, and deployed once |
 | 12:33:36 | Repeated check: `/` returned **200**, `/health` 200, no unavailable message, the project, the Azure-only headline, the footer note, and 14 resume entries. The site is back on the new password, with its data intact |
 
-Outage: about 4 to 5 minutes of 503 on the root URL (12:28:51 to roughly 12:33), with the profile visible the whole time. I did not log in to the database or print the old or new password anywhere; the web service reads it through the `${{Postgres.DATABASE_URL}}` reference.
+Outage: about 4 to 5 minutes of 503 on the root URL (12:28:51 to roughly 12:33), with the profile visible the whole time. Nobody logged in to the database or printed the old or new password anywhere; the web service reads it through the `${{Postgres.DATABASE_URL}}` reference.
 
 What I would do differently: put the start command in the service settings from the start instead of relying on `railway.toml`, and rotate the password before taking the site to its real domain, not after.
 

@@ -94,6 +94,13 @@ Each follows the same shape: symptom, evidence, diagnosis, repair, repeated chec
 - Zoho send, receive, reply and SPF/DKIM/DMARC results: [ex06.md](docs/evidence/ex06.md), [zoho-header-check.md](docs/evidence/zoho-header-check.md).
 - GA4 page view and click verification, and what each event means: [ex06.md](docs/evidence/ex06.md) section 3. The tag loads only after a visitor accepts the banner.
 
+## How AI was used
+
+- Earlier in the course I used GitHub Copilot CLI with the Superpowers plugin in Codespaces to write the spec, plan and first version of the site (commits dated 2026-10-06, with the spec and plans under `docs/superpowers/`).
+- On 2026-10-26 I used Claude (Anthropic) to finish Project 1. Claude wrote the PostgreSQL support, the export, load and compare scripts, the tests, the migration plan, the diagrams, the README and the evidence files, and it operated the Railway dashboard and console in my browser at my direction. Its commits carry a `Co-Authored-By: Claude` trailer.
+- What I did myself: ran the Azure SSH export, signed in to Railway, Cloudflare and GitHub, installed Railway's GitHub app, approved account-changing steps (including the password rotation), saved the Cloudflare DNS changes, and decided to keep the root proxied for now.
+- How results were checked: tests, hashes of both databases, and live HTTP checks, all recorded with real output in `docs/evidence/`. Claims I could not check are marked unverified.
+
 ## Costs, credits and cleanup
 
 Checked 2026-10-26 unless noted.
