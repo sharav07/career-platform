@@ -138,10 +138,37 @@ def test_homepage_renders_seed_profile_when_database_is_down(tmp_path: Path) -> 
     )
     response = TestClient(app).get("/")
 
-    assert response.status_code == 200
+    assert response.status_code == 503
     assert "Casey Example" in response.text
     assert "Sample Product Analyst" in response.text
     assert "A clearly fake resume fixture for tests." in response.text
     assert "mailto:casey@example.test" in response.text
-    assert "temporarily unavailable" in response.text
+    assert "Projects temporarily unavailable" in response.text
     assert "Internal Server Error" not in response.text
+
+
+def test_homepage_recovers_without_restart(tmp_path: Path) -> None:
+    """Database down -> 503; database back -> 200 on the next request, same app object."""
+    database_path = tmp_path / "later" / "resume.db"
+    client = TestClient(create_app(database_path=database_path, seed_path=seed_path()))
+
+    assert client.get("/").status_code == 503
+    import_seed(database_path, seed_path())
+    healthy = client.get("/")
+
+    assert healthy.status_code == 200
+    assert "Projects temporarily unavailable" not in healthy.text
+
+
+def test_empty_projects_table_shows_message_not_sample_data(tmp_path: Path) -> None:
+    database_path = tmp_path / "resume.db"
+    data = json.loads(seed_path().read_text(encoding="utf-8"))
+    data["projects"] = []
+    custom = tmp_path / "noprojects.json"
+    custom.write_text(json.dumps(data), encoding="utf-8")
+    import_seed(database_path, custom)
+
+    response = TestClient(create_app(database_path=database_path, seed_path=custom)).get("/")
+
+    assert response.status_code == 200
+    assert "No projects published yet." in response.text

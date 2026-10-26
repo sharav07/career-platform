@@ -55,6 +55,7 @@
 
   <section class="resume-section" aria-labelledby="projects-heading">
     <h2 id="projects-heading">Projects</h2>
+    {% if not content.resume.projects %}<p class="metadata">No projects published yet.</p>{% endif %}
     {% for item in content.resume.projects %}
     <article class="resume-entry">
       <h3>{{ item.title }}</h3>

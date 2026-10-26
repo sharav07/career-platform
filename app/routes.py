@@ -26,6 +26,8 @@ def resume_page(request: Request):
         request=request,
         name="resume.html",
         context={"content": content},
+        # Failed database: profile stays visible, but say so honestly with 503.
+        status_code=503 if content.degraded else 200,
     )
 
 

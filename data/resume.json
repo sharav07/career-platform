@@ -377,7 +377,34 @@
     }
   ],
   "skill_groups": [],
-  "projects": [],
+  "projects": [
+    {
+      "id": "project-career-platform",
+      "title": "Career Platform (this website) — project in progress",
+      "summary": "This site is a work in progress and is also a course project for ISBA 4775 at LMU. It is a FastAPI application that reads its content from a database and serves it behind Nginx on a cloud host.",
+      "contribution": "Built with an AI coding agent under written project rules. I reviewed the specification, plan and changes, and I deployed and operate the site myself.",
+      "outcome": "Live on my own domain over HTTPS. Planned next steps: job search tooling and automated deployment.",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "SQLite",
+        "Nginx",
+        "Railway",
+        "Azure",
+        "Cloudflare",
+        "GitHub Actions"
+      ],
+      "links": [
+        {
+          "label": "Source code",
+          "url": "https://github.com/sharav07/career-platform"
+        }
+      ],
+      "display_order": 1,
+      "visible": true
+    }
+  ],
   "education": [
     {
       "id": "education-lmu",

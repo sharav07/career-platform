@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 from app.models import (
     Certification,
@@ -17,6 +19,71 @@ from app.models import (
     Skill,
     SkillGroup,
 )
+
+
+try:  # psycopg is only needed when DATABASE_URL points at PostgreSQL
+    import psycopg
+    from psycopg.rows import dict_row
+
+    DB_ERRORS: tuple[type[BaseException], ...] = (OSError, sqlite3.Error, psycopg.Error)
+except ImportError:  # pragma: no cover
+    psycopg = None  # type: ignore[assignment]
+    DB_ERRORS = (OSError, sqlite3.Error)
+
+
+def is_postgres(target: str | Path) -> bool:
+    """True when ``target`` is a PostgreSQL connection URL, not a SQLite path."""
+    return str(target).startswith(("postgres://", "postgresql://"))
+
+
+class _PostgresConnection:
+    """Gives a psycopg connection the same ``execute`` calls the SQLite code uses.
+
+    The queries are written with SQLite ``?`` placeholders. PostgreSQL drivers
+    use ``%s``, so the placeholder is translated here and nowhere else.
+    """
+
+    def __init__(self, raw) -> None:
+        self.raw = raw
+
+    def execute(self, sql: str, params: tuple = ()):
+        return self.raw.execute(sql.replace("?", "%s"), params)
+
+    def executemany(self, sql: str, rows) -> None:
+        with self.raw.cursor() as cursor:
+            cursor.executemany(sql.replace("?", "%s"), list(rows))
+
+    def executescript(self, script: str) -> None:
+        for statement in script.split(";"):
+            if statement.strip():
+                self.raw.execute(statement)
+
+
+@contextmanager
+def connect(target: str | Path) -> Iterator:
+    """Open one short-lived connection, commit on success, roll back on error.
+
+    A new connection per request is deliberate: when the database comes back
+    after an outage, the next request works without restarting the app.
+    """
+    if is_postgres(target):
+        if psycopg is None:  # pragma: no cover
+            raise RuntimeError("psycopg is required for PostgreSQL URLs")
+        raw = psycopg.connect(str(target), row_factory=dict_row, connect_timeout=5)
+        connection = _PostgresConnection(raw)
+    else:
+        raw = sqlite3.connect(target)
+        raw.row_factory = sqlite3.Row
+        raw.execute("PRAGMA foreign_keys = ON")
+        connection = raw
+    try:
+        yield connection
+        raw.commit()
+    except BaseException:
+        raw.rollback()
+        raise
+    finally:
+        raw.close()
 
 
 SCHEMA = """
@@ -110,18 +177,17 @@ CREATE TABLE IF NOT EXISTS certifications (
 """
 
 
-def initialize_database(path: Path) -> None:
-    """Create the v1 SQLite schema if it does not already exist."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(path) as connection:
-        connection.execute("PRAGMA foreign_keys = ON")
+def initialize_database(target: str | Path) -> None:
+    """Create the schema if it does not already exist (SQLite file or PostgreSQL URL)."""
+    if not is_postgres(target):
+        Path(target).parent.mkdir(parents=True, exist_ok=True)
+    with connect(target) as connection:
         connection.executescript(SCHEMA)
 
 
-def load_resume(database_path: Path) -> ResumeSeed:
-    """Load visible resume content from SQLite in explicit display order."""
-    with sqlite3.connect(database_path) as connection:
-        connection.row_factory = sqlite3.Row
+def load_resume(database_path: str | Path) -> ResumeSeed:
+    """Load visible resume content in explicit display order (SQLite or PostgreSQL)."""
+    with connect(database_path) as connection:
         profile_row = connection.execute(
             "SELECT * FROM profiles WHERE visible = 1 ORDER BY id LIMIT 1"
         ).fetchone()
