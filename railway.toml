@@ -1,4 +1,6 @@
 [deploy]
+# Loads the Azure export into PostgreSQL on the first deploy only (it skips a non-empty database).
+preDeployCommand = "python scripts/load_export.py data/migrations/azure-export-2026-10-26.json"
 startCommand = "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --proxy-headers --forwarded-allow-ips='*'"
 healthcheckPath = "/health"
 restartPolicyType = "ON_FAILURE"
