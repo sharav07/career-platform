@@ -67,6 +67,27 @@ Rendered page comparison, the same script run in the browser on each site (visib
 - `railway.toml` set `preDeployCommand`, but the Railway build log shows only the start command and no pre-deploy step, and the database stayed empty. Railway's settings page says Config as Code is deprecated and that services that never used it cannot opt in, so I do not rely on it. I ran the load from the service console instead. The loader skips a non-empty database, so a later redeploy cannot overwrite data.
 - Railway's GitHub App was not installed on my account ("Could not load branches"). I deployed from the public repo URL. Auto-deploy on push needs the app, which I connect before the verified-change step (see the README).
 
-## 6. Not yet done at the time of writing
+## 6. Cutover: domain to Railway (UTC times, 2026-10-26)
 
-Custom domain cutover, `www` redirect, post-cutover checks, Postgres password rotation (instructor's follow-up to Railway's Oct 21 incident), and the verified GitHub-to-Railway change. Their results will be added below with their own dates, or marked unverified.
+- ~11:59: added `sharavjiwrajka.me` as a custom domain on the Railway service (port 8080). Railway asked for `CNAME @ 6zzkzaxh.up.railway.app` and TXT `_railway-verify`.
+- By 12:02 the Cloudflare zone already had both records (the root `A` record to the Azure IP was gone) with the root CNAME set to **Proxied**. I did not make that edit; I found it that way. Mail records (MX, SPF, DKIM, DMARC) were untouched throughout.
+- 12:03:26: `https://sharavjiwrajka.me/` returned HTTP 200 from Railway with `server: cloudflare`, the Azure-only headline, and the new "No projects published yet." text (which only the new code has). So the live name was already on Railway.
+- Cloudflare DNS records after my checks: root CNAME to Railway, `www` proxied, mail records intact.
+
+## 7. TLS incident: root set to DNS only
+
+The brief wants the root record DNS only. I toggled it to DNS only (through the Cloudflare dashboard; the final save was done by me asking you to click, because the dashboard edit was blocked for me).
+
+- 12:10:38: DNS-over-HTTPS check: the root answered `69.46.46.99` (TTL 60, a Railway address, not Cloudflare's `104.21.x`/`172.67.x`), `www` answered Cloudflare proxy IPs, MX unchanged.
+- 12:10:46: browser requests to `https://sharavjiwrajka.me` failed ("Failed to fetch", then Chrome's error page). The site was effectively down over HTTPS.
+- Railway's domain status (read from the service settings) said: **"Failed to issue TLS certificate"**, **"Let's Encrypt rate limit reached. Please wait before retrying."**, and **"This error cannot be automatically retried. Please check your DNS configuration or contact support."**
+- Hypothesis: the domain hit a Let's Encrypt rate limit. The Azure certificate was issued by Certbot on 2026-10-08, and earlier Railway attempts while the record was Proxied may have counted too. **I did not verify which limit it was or when it resets** (I could not read certificate-transparency logs).
+- Repair: set the root record back to **Proxied**. Cloudflare then serves its own certificate for the root.
+- 12:14:24: repeated check: `https://sharavjiwrajka.me/` returned 200, `server: cloudflare`, headline present, `/health` 200. After the change Railway's domain panel said "Cloudflare proxy detected" with no certificate error.
+- `https://www.sharavjiwrajka.me/?x=1` and `http://www.sharavjiwrajka.me/` both ended at `https://sharavjiwrajka.me/` in the browser. The query string `?x=1` was not preserved.
+
+**Current state (honest):** the root is Proxied, so the certificate visitors see is Cloudflare's, not one issued by Railway. That does not meet the brief's DNS-only requirement. Retrying Railway's certificate later is the open step; if it succeeds I will switch the root back to DNS only and record the certificate subject and dates here. Until then, treat that part as **unverified / not met**.
+
+## 8. Not yet done at the time of writing
+
+Verified change deployed through Railway's GitHub connection (the GitHub app was not yet installed), Postgres password rotation (the instructor's follow-up to Railway's Oct 21 incident), and a Railway-issued certificate for the root.
