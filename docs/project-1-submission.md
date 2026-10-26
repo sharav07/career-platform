@@ -42,7 +42,7 @@ Status key: **done** = evidence exists and was checked, **partial** = evidence e
 ## 6. Zoho email
 
 - Send, receive, reply, SPF, DKIM, DMARC: [evidence/ex06.md](evidence/ex06.md) and [evidence/zoho-header-check.md](evidence/zoho-header-check.md). **done** for the checks recorded.
-- The message sent before the MX records existed: **not recorded**, so unverified.
+- The message sent before the MX records existed: I report that it went through, but I saved no evidence for it, so it is listed in ex06.md as **unverified**.
 
 ## 7. Google Analytics 4
 
@@ -55,7 +55,7 @@ Status key: **done** = evidence exists and was checked, **partial** = evidence e
 
 ## Other items to know
 
-- Railway Postgres password rotation (the instructor's follow-up to the Oct 21 incident): **not done** at the time of writing. Trial builds are running again (deployments above succeeded), so it can now be done and recorded.
+- Railway Postgres password rotation (the instructor's follow-up to the Oct 21 incident): **done** 2026-10-26 12:28 UTC, with the redeploy, the resulting short outage and the fix recorded in [evidence/railway-migration.md](evidence/railway-migration.md) section 9.
 - Ex04 HTTPS write-up in my own words: [how-this-site-is-secured.md](how-this-site-is-secured.md).
 
 ## Commit used for the checks

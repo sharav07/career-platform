@@ -87,6 +87,8 @@ Each follows the same shape: symptom, evidence, diagnosis, repair, repeated chec
 3. **Railway database empty after first deploy (real, 2026-10-26):** the site returned 503 with "Projects temporarily unavailable" because the pre-deploy data load did not run. I confirmed the 503, loaded the data from the service console, verified hashes, and saw the same URL return 200 without a restart. [railway-migration.md](docs/evidence/railway-migration.md) sections 2 to 5.
 4. **TLS certificate on the root domain (real, 2026-10-26):** after I changed the root record to DNS only, Railway reported "Let's Encrypt rate limit reached" and the root showed a certificate error. I put the record back to Proxied so Cloudflare serves the certificate, and the site recovered. Evidence and the current state are in [railway-migration.md](docs/evidence/railway-migration.md) section 7.
 
+5. **Password rotation took the site down for a few minutes (real, 2026-10-26):** regenerating the Railway Postgres password left the running web container with the old password, and Railway's automatic redeploy failed with "No start command detected" because it did not read `railway.toml`. The site showed the designed 503 until I set the start command in the service settings and redeployed. [railway-migration.md](docs/evidence/railway-migration.md) section 9.
+
 ## Email and analytics
 
 - Zoho send, receive, reply and SPF/DKIM/DMARC results: [ex06.md](docs/evidence/ex06.md), [zoho-header-check.md](docs/evidence/zoho-header-check.md).
@@ -108,10 +110,10 @@ Checked 2026-10-26 unless noted.
 ## Remaining limitations
 
 - The root domain currently uses Cloudflare's proxy (orange cloud) with Cloudflare's certificate, not Railway's own certificate. The brief asks for DNS only. See failure 4 and the evidence file for the current state.
-- The pre-deploy data load in `railway.toml` did not run on Railway; the load was done by hand from the console. It is safe to re-run (it skips a non-empty database). The project entry was likewise added from the console with `scripts/add_seed_projects.py`.
+- `railway.toml` is not reliable on Railway (config as code is deprecated for new services). The start command is now also set in the service settings. The pre-deploy data load in `railway.toml` did not run on Railway; the load was done by hand from the console. It is safe to re-run (it skips a non-empty database). The project entry was likewise added from the console with `scripts/add_seed_projects.py`.
 - No schema migration tooling. The schema is created with `CREATE TABLE IF NOT EXISTS`.
 - Railway database backups are not configured. Data loss on the trial is possible; the Azure export in `data/migrations/` is the only copy besides the live databases.
-- Railway reported that environment variables may have been read in its Oct 21 incident. The instructor asked to rotate the Postgres password and redeploy once trial builds are back. Status is in the evidence file.
+- Railway reported that environment variables may have been read in its Oct 21 incident. I rotated the Postgres password and redeployed on 2026-10-26 (12:28 UTC); see [railway-migration.md](docs/evidence/railway-migration.md) section 9. The old password was only ever stored as a Railway variable reference.
 
 ## Reflection (written afterward, 2026-10-26, with help from Claude)
 

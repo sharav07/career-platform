@@ -104,6 +104,23 @@ A second push confirms the loop: commit `9bf118f` (pushed 12:21:32 UTC) deployed
 
 Recovery: see the README rollback section. Railway keeps earlier deployments in its Deployments list; redeploying one restores that code. The database is separate and is not rolled back by a code redeploy.
 
-## 9. Not yet done at the time of writing
+## 9. Postgres password rotation (instructor follow-up to Railway's Oct 21 incident) and the outage it caused
 
-Postgres password rotation (the instructor's follow-up to Railway's Oct 21 incident), and a Railway-issued certificate for the root.
+The instructor's announcement asked for three things once Trial builds were back: rotate the Postgres password, redeploy the web service so it picks up the new `DATABASE_URL`, and write down what I did and when. Trial builds were running (sections 8 deployments succeeded).
+
+| Time (UTC) | What happened |
+| --- | --- |
+| 12:28:51 | In the Postgres service, Database, Config, I clicked **Regenerate** next to the password and confirmed. Railway's dialog said it would update the environment variables, redeploy the database, and redeploy services using the password |
+| 12:29:56 | `https://sharavjiwrajka.me/` returned **503** "Projects temporarily unavailable". The web container that was already running still held the old password |
+| ~12:28 to 12:30 | Railway's automatic redeploy of the web service **failed during build**: `No start command detected. Specify a start command` (Railpack). So nothing restarted with the new password |
+| 12:30:23 | Still 503. Both the `/` 503 and `/health` 200 matched the deliberate-failure design: profile visible, no sample data, health check still OK |
+| ~12:31 | Diagnosis: that build did not read `railway.toml` (Railway marks Config as Code deprecated, and the earlier builds that did read it were luck, not a guarantee). I set the **Custom Start Command** directly in the service Settings, Deploy: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2 --proxy-headers --forwarded-allow-ips='*'`, and deployed once |
+| 12:33:36 | Repeated check: `/` returned **200**, `/health` 200, no unavailable message, the project, the Azure-only headline, the footer note, and 14 resume entries. The site is back on the new password, with its data intact |
+
+Outage: about 4 to 5 minutes of 503 on the root URL (12:28:51 to roughly 12:33), with the profile visible the whole time. I did not log in to the database or print the old or new password anywhere; the web service reads it through the `${{Postgres.DATABASE_URL}}` reference.
+
+What I would do differently: put the start command in the service settings from the start instead of relying on `railway.toml`, and rotate the password before taking the site to its real domain, not after.
+
+## 10. Not yet done at the time of writing
+
+A Railway-issued certificate for the root domain (the root is still Proxied, see section 7).
