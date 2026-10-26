@@ -41,6 +41,7 @@
     {% endfor %}
   </section>
 
+  {% if content.resume.skill_groups %}
   <section class="resume-section" aria-labelledby="skills-heading">
     <h2 id="skills-heading">Skills</h2>
     {% for group in content.resume.skill_groups %}
@@ -52,6 +53,7 @@
     </div>
     {% endfor %}
   </section>
+  {% endif %}
 
   <section class="resume-section" aria-labelledby="projects-heading">
     <h2 id="projects-heading">Projects</h2>
