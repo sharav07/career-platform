@@ -15,6 +15,7 @@
         <a href="{{ url_for('privacy_page') }}">Privacy</a>
         {% if ga_measurement_id %}<button type="button" id="consent-reopen" class="link-button">Privacy choices</button>{% endif %}
       </nav>
+      <p class="site-note">Served from Railway with PostgreSQL.</p>
     </footer>
     {% if ga_measurement_id %}
     <div id="consent-banner" class="consent-banner" role="dialog" aria-label="Analytics choice" hidden>

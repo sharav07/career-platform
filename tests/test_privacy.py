@@ -84,3 +84,9 @@ def test_analytics_script_is_served_and_gates_on_consent(tmp_path: Path) -> None
     assert script.count("googletagmanager.com/gtag/js") == 1
     assert 'saveChoice("granted")' in script
     assert 'saveChoice("denied")' in script
+
+
+def test_footer_shows_hosting_note(tmp_path: Path, analytics_off: None) -> None:
+    response = make_client(tmp_path).get("/")
+
+    assert "Served from Railway with PostgreSQL." in response.text

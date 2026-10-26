@@ -343,3 +343,9 @@ a:focus-visible {
     text-align: left;
   }
 }
+
+.site-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #5b6472;
+}
