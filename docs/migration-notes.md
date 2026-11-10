@@ -67,3 +67,13 @@ Other choices: PostgreSQL 18.6 to match Railway exactly. db.t4g.micro, the cheap
 | The SSH rule allows `99.7.123.79/32`, but the laptop's address has changed | SSH would time out | Replace the rule before the first connection |
 | `aws-mcp` server not connected (no credentials, and `uvx` was missing earlier) | Only lookups like pricing are affected. The CLI works | Fix when convenient |
 | The database is billing while EC2 is blocked (about $13.98 a month) | Uses credits | Stop it if the fallback is used |
+
+## 2026-11-09
+
+- Upgraded the AWS account from the Free plan to the Paid plan on the instructor's advice. Credits carry over ($140 active, about $2.54 used).
+- RDS automated backup retention raised from 1 to 7 days (the Free plan cap no longer applies).
+- Added an SSH rule for my current IP.
+- EC2 launch (t3.micro) failed again with VcpuLimitExceeded. The Standard-family vCPU quota is 1 and every t3 size needs 2. Support case 179367074500312 is still open; I posted an update. Service Quotas blocks a new request while it is open.
+- A t2.micro (1 vCPU) is denied by the course IAM policy, so I did not use it. Changing the policy needs the instructor's OK.
+- Railway trial has ended and the site is offline. Azure VM is the fallback.
+- Ex07 evidence written: docs/evidence/ex07.md. DNS screenshot still to add.

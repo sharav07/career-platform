@@ -41,6 +41,28 @@ Update the live site: push to `main`. Railway's GitHub connection builds and dep
 
 Diagrams (Azure, Railway, email and analytics paths): [docs/architecture.md](docs/architecture.md).
 
+## AWS migration (in progress)
+
+Status 2026-11-09: the RDS database is built, but the server is not launched because the account's EC2 vCPU quota is 1 (AWS support case open). The Railway trial has ended, so the site is offline until the cutover. Evidence: [docs/evidence/ex07.md](docs/evidence/ex07.md). Dashed boxes are not done yet.
+
+```mermaid
+flowchart LR
+  V[Visitor browser] -- "1. DNS lookup" --> CF[("Cloudflare DNS<br/>today: still points at Railway<br/>target: Elastic IP, DNS only")]
+  V -- "2. HTTPS, TCP 443" --> SGW{{"Security group isba-4775-web<br/>80 and 443 open, 22 from my IP only"}}
+  subgraph VPC ["Default VPC, us-east-1, zone us-east-1a"]
+    SGW --> EC2["EC2 t3.micro: NOT LAUNCHED<br/>blocked by vCPU quota<br/>Nginx 80/443 + Let's Encrypt"]
+    EC2 -- "HTTP to 127.0.0.1:8000" --> UV["Uvicorn, 2 workers<br/>FastAPI app, systemd"]
+    UV -- "PostgreSQL, TCP 5432<br/>read-only user career_app" --> SGD{{"Security group isba-4775-db<br/>5432 only from the web group"}}
+    SGD --> RDS[("RDS PostgreSQL 18.6, Single-AZ<br/>db.t4g.micro, 20 GB encrypted<br/>private, 7-day backups<br/>CREATED")]
+  end
+  ME["Me over SSH, TCP 22<br/>key only"] -.-> SGW
+  DUMP[("Backup dump 2026-11-02<br/>laptop + iCloud, outside AWS")] -. "pg_restore from EC2<br/>NOT DONE YET" .-> RDS
+  RAIL["Railway: trial ended,<br/>service offline"] -. "old target, retired" .- CF
+  classDef todo stroke-dasharray: 5 5,stroke:#b45309
+  class EC2,UV,DUMP todo
+```
+
+
 ## How the migration kept the current data
 
 The Azure database was the source of truth, not the seed. I changed the profile headline on Azure only, exported every table to JSON, loaded that into Railway PostgreSQL, and compared row counts and content hashes table by table. All ten tables matched, and the rendered pages from both sites were identical. Details and real output: [railway-migration.md](docs/evidence/railway-migration.md). The tools are `scripts/sqlite_export.py`, `scripts/load_export.py` and `scripts/compare_data.py`.
